@@ -20,6 +20,7 @@ public class Linkedin {
         WebElement loginButton = driver.findElement(By.id("login-submit"));
         loginButton.click();
 
+        //сравнение по содержанию
         if (driver.getPageSource().contains("Профиль"))
         {
             System.out.println("page is ok");
@@ -28,6 +29,16 @@ public class Linkedin {
         {
             System.out.println("wrong page");
         }
+        //сравнение по урл
+        if (driver.getCurrentUrl().contains("https://www.linkedin.com/feed"))
+        {
+            System.out.println("url is ok!");
+        }
+        else
+        {
+            System.out.println("wrong url");
+        }
+
         driver.quit();
     }
 
