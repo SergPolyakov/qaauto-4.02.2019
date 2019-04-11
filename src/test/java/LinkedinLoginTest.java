@@ -28,8 +28,8 @@ public class LinkedinLoginTest {
     @DataProvider
     public Object[][] validDataProvider() {
         return new Object[][]{
-                { "TESTEROK111333@gmail.com", "111333" },
-                { "testerok111333@gmail.com", "111333" },
+                //{ "TESTEROK111333@gmail.com", "111333" },
+               // { "testerok111333@gmail.com", "111333" },
                 { " testerok111333@gmail.com ", "111333" }
         };
     }
@@ -49,8 +49,8 @@ public class LinkedinLoginTest {
     @DataProvider
     public  Object [][] emptyLoginFieldsProvider() {
         return new Object[][]{
-                {"", "111333"},
-                {"testerok111333@gmail.com", ""},
+                //{"", "111333"},
+                //{"testerok111333@gmail.com", ""},
                 {"",""}
         };
     }
@@ -58,16 +58,16 @@ public class LinkedinLoginTest {
     @Test (dataProvider = "emptyLoginFieldsProvider")
     public void emptyOneOfLoginFields(String userEmail, String userPass) {
 
-        loginPage.loginWithoutPasswordOrEmail(userEmail, userPass);
+        LoginPage newLoginPage = loginPage.login(userEmail, userPass);
 
-        Assert.assertTrue(loginPage.isPageLoaded(),
+        Assert.assertTrue(newLoginPage.isPageLoaded(),
                 "User logged in with an empty login field!");
     }
 //-----------------------------------------------------------------------
     @DataProvider
     public Object [][] invalidDataProvider() {
         return new Object[][]{
-                {"testerok111333@gmail.com", "qwerty", "", "Это неверный пароль. Повторите попытку или измените пароль."},
+               // {"testerok111333@gmail.com", "qwerty", "", "Это неверный пароль. Повторите попытку или измените пароль."},
                 {"testerok111333@@gmail.com", "111333", "Этот адрес эл. почты не зарегистрирован в LinkedIn. Повторите попытку.", ""}
         };
     }
@@ -78,7 +78,7 @@ public class LinkedinLoginTest {
                                      String emailValidation,
                                      String passwordValidation) {
 
-        LoginSubmitPage loginSubmitPage = loginPage.loginWithWrongPasswordOrEmail(userEmail, userPass);
+        LoginSubmitPage loginSubmitPage = loginPage.login(userEmail, userPass);
 
         Assert.assertTrue(loginSubmitPage.isPageLoaded(),
                 "Login submit page is not loaded!");
