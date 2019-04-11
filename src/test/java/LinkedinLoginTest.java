@@ -80,7 +80,6 @@ public class LinkedinLoginTest {
 
         LoginSubmitPage loginSubmitPage = loginPage.loginWithWrongPasswordOrEmail(userEmail, userPass);
 
-        //LoginSubmitPage loginSubmitPage = new LoginSubmitPage(driver);
         Assert.assertTrue(loginSubmitPage.isPageLoaded(),
                 "Login submit page is not loaded!");
 
