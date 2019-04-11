@@ -1,63 +1,93 @@
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class LinkedinLoginTest {
 
-    @Test
-    public void successfulLoginTest() {
+    WebDriver driver;
+    LoginPage loginPage;
 
+    @BeforeMethod
+    public  void beforeMethod() {
         System.setProperty("webdriver.chrome.driver", "C:/MyDrivers/chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
+        driver = new ChromeDriver();
         driver.get("https://www.linkedin.com");
 
-        LoginPage loginPage = new LoginPage(driver);
+        loginPage = new LoginPage(driver);
+    }
+
+    @AfterMethod
+    public  void afterMethod() {
+        driver.quit();
+    }
+//---------------------------------------------------------------------
+    @DataProvider
+    public Object[][] validDataProvider() {
+        return new Object[][]{
+                { "TESTEROK111333@gmail.com", "111333" },
+                { "testerok111333@gmail.com", "111333" },
+                { " testerok111333@gmail.com ", "111333" }
+        };
+    }
+
+    @Test(dataProvider = "validDataProvider")
+    public void successfulLoginTest(String userEmail, String userPassword) {
+
         Assert.assertTrue(loginPage.isPageLoaded(),
                 "Login page was not loaded");
 
-        loginPage.login("testerok111333@gmail.com", "111333");
+        HomePage homePage = loginPage.login(userEmail, userPassword);
 
-        HomePage homePage = new HomePage(driver);
         Assert.assertTrue(homePage.isPageLoaded(),
                 "Home page is not loaded");
-
-        driver.quit();
-
+    }
+//----------------------------------------------------------------------
+    @DataProvider
+    public  Object [][] emptyLoginFieldsProvider() {
+        return new Object[][]{
+                {"", "111333"},
+                {"testerok111333@gmail.com", ""},
+                {"",""}
+        };
     }
 
-    @Test
-    public void emptyEmailField() {
-        System.setProperty("webdriver.chrome.driver", "C:/MyDrivers/chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://www.linkedin.com");
+    @Test (dataProvider = "emptyLoginFieldsProvider")
+    public void emptyOneOfLoginFields(String userEmail, String userPass) {
 
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("", "111333");
+        loginPage.loginWithoutPasswordOrEmail(userEmail, userPass);
 
         Assert.assertTrue(loginPage.isPageLoaded(),
                 "User logged in with an empty login field!");
-
-        driver.quit();
-
+    }
+//-----------------------------------------------------------------------
+    @DataProvider
+    public Object [][] invalidDataProvider() {
+        return new Object[][]{
+                {"testerok111333@gmail.com", "qwerty", "", "Это неверный пароль. Повторите попытку или измените пароль."},
+                {"testerok111333@@gmail.com", "111333", "Этот адрес эл. почты не зарегистрирован в LinkedIn. Повторите попытку.", ""}
+        };
     }
 
-    @Test
-    public void incorrectPassword() throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "C:/MyDrivers/chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://www.linkedin.com");
+    @Test (dataProvider = "invalidDataProvider")
+    public void enterIncorrectValues(String userEmail,
+                                     String userPass,
+                                     String emailValidation,
+                                     String passwordValidation) {
 
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.login("testerok111333@gmail.com", "qwerty");
+        LoginSubmitPage loginSubmitPage = loginPage.loginWithWrongPasswordOrEmail(userEmail, userPass);
 
-        LoginSubmitPage forgotPassPage = new LoginSubmitPage(driver);
-        Assert.assertTrue(forgotPassPage.isPageLoaded(),
-                "Forgot password page is not loaded!");
+        //LoginSubmitPage loginSubmitPage = new LoginSubmitPage(driver);
+        Assert.assertTrue(loginSubmitPage.isPageLoaded(),
+                "Login submit page is not loaded!");
 
-        Thread.sleep(1000);
+        Assert.assertEquals(loginSubmitPage.getUserEmailValidationMessage(), emailValidation,
+                "userEmail validation message is incorrect");
 
-        driver.quit();
+        Assert.assertEquals(loginSubmitPage.getUserPasswordValidationMessage(), passwordValidation,
+                "userPassword validation message is incorrect");
     }
-
 }
