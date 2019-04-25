@@ -1,35 +1,25 @@
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+package test;
+
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import page.HomePage;
+import page.SearchResultPage;
 
 import java.util.List;
 
-public class SearchTest {
+/**
+ * Basic search test class.
+ */
+public class SearchTest extends BaseTest {
 
-    WebDriver driver;
-    LoginPage loginPage;
 
-    @BeforeMethod
-    public void beforeMethod() {
-        System.setProperty("webdriver.chrome.driver", "C:/MyDrivers/chromedriver.exe");
-        driver = new ChromeDriver();
-        driver.get("https://www.linkedin.com");
-
-        loginPage = new LoginPage(driver);
-    }
-
-    @AfterMethod
-    public void afterMethod() {
-        driver.quit();
-    }
-
+    /**
+     * Basic test of the search function with checking the number of search results and the presence of the search text in the results
+     */
     @Test
     public void basicSearchTest() {
-        String userEmail = "testerok111333@gmail.com";
-        String userPassword = "111333";
+        String userEmail = "lua-lua@meta.ua";
+        String userPassword = "serg111333";
         String searchTerm = "HR";
 
         Assert.assertTrue(loginPage.isPageLoaded(),
@@ -43,7 +33,7 @@ public class SearchTest {
         SearchResultPage searchResultPage = homePage.search(searchTerm);
 
         Assert.assertTrue(searchResultPage.isPageLoaded(),
-                "SearchResultPage is not loaded");
+                "page.SearchResultPage is not loaded");
 
         Assert.assertEquals(searchResultPage.getSearchResultsCount(), 10,
                 "Results count is wrong!");
@@ -54,8 +44,6 @@ public class SearchTest {
             Assert.assertTrue(searchResult.contains(searchTerm),
                     "SearchTerm: " +searchTerm+ " not found in:  \n" +searchResult);
         }
-
-
 
     }
 }

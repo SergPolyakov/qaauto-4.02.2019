@@ -1,8 +1,11 @@
+package test;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import page.*;
 
 public class SuccessfulPasswordResetTest {
     WebDriver driver;
@@ -30,12 +33,12 @@ public class SuccessfulPasswordResetTest {
         ForgotPasswordPage forgotPasswordPage = loginPage.clickForgotPassButton();
 
         Assert.assertTrue(forgotPasswordPage.isPageLoaded(),
-                "ForgotPasswordPage is not loaded!");
+                "page.ForgotPasswordPage is not loaded!");
 
         FindAccountPage findAccountPage = forgotPasswordPage.findAccount(userEmail);
 
         Assert.assertTrue(findAccountPage.isPageLoaded(),
-                "FindAccountPage is not loaded!");
+                "page.FindAccountPage is not loaded!");
 
         driver.get("https://accounts.google.com");
 
@@ -48,17 +51,17 @@ public class SuccessfulPasswordResetTest {
         GmailPage gmailPage = googleHomePage.goToGmail();
 
         Assert.assertTrue(gmailPage.isPageLoaded(),
-                "GmailPage is not loaded!");
+                "page.GmailPage is not loaded!");
 
         NewPasswordPage newPasswordPage = gmailPage.clickLinkInLetter();
 
         Assert.assertTrue(newPasswordPage.isPageLoaded(),
-                "NewPasswordPage is not loaded!");
+                "page.NewPasswordPage is not loaded!");
 
         HomePage homePage = newPasswordPage.enterNewPassword(newUserPassword);
 
         Assert.assertTrue(homePage.isPageLoaded(),
-                "HomePage is not loaded!");
+                "page.HomePage is not loaded! Password wasn't change!");
 
 
 
