@@ -20,9 +20,9 @@ public class LinkedinLoginTest extends BaseTest {
     @DataProvider
     public Object[][] validDataProvider() {
         return new Object[][]{
-                //{ "TESTEROK111333@gmail.com", "111333" },
-               // { "testerok111333@gmail.com", "111333" }
-                { "reabilitolog1988@gmail.com", "stsvadba05102013" }
+               { "TESTEROK111333@gmail.com", "111333" },
+               { "testerok111333@gmail.com", "111333" }
+                
         };
     }
 
