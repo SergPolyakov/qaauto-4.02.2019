@@ -18,8 +18,8 @@ public class SearchTest extends BaseTest {
      */
     @Test
     public void basicSearchTest() {
-        String userEmail = "lua-lua@meta.ua";
-        String userPassword = "serg111333";
+        String userEmail = "lua@meta.ua";
+        String userPassword = "111333";
         String searchTerm = "HR";
 
         Assert.assertTrue(loginPage.isPageLoaded(),
